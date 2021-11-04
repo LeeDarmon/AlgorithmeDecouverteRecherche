@@ -1,0 +1,26 @@
+{
+  "name": "algorithmedecouverterecherche",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeDarmon/AlgorithmeDecouverteRecherche.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeeDarmon/AlgorithmeDecouverteRecherche/issues"
+  },
+  "homepage": "https://github.com/LeeDarmon/AlgorithmeDecouverteRecherche#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "electron": "^15.3.0",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19"
+  }
+}
