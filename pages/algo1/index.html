@@ -7,23 +7,51 @@
     <title>Main</title>    
     <link rel="stylesheet" href="../tailwind.css">
 </head>
-<body class="bg-gray-800 text-gray-200 w-full flex justify-center align-middle">
+<body class="bg-gray-800 text-gray-200 w-full flex justify-center align-middle text-center">
     
-    <div class="grid grid-cols-1 gap-4 align-middle justify-items-center">
-        <h1 class="font-bold font-lg p-4">Découverte de la recherche</h1>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 1 : Ordonnancement
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 2 : Disque et rectangle
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 3 : Bande de tissue
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 4 : Conteneur et sphere
-        </a>
+<div class="grid grid-cols-3 gap-4">
+    <div class="col-span-12">
+    <h1>Algorithme d'Ordonnancement à machine unique</h1>
+<br>
+    <h3 class="text-left">Etape 1 : génération des 5 taches (1 à 5) avec des durées et délais aléatoires</h3>
     </div>
+
+
+    <div class="col-span-12">
+    <table class="border-collapse border border-gray-400 text-center"> 
+        <tr>
+            <td class="border border-gray-400 px-2">Tache</td>
+            <td class="border border-gray-400 px-2">Tache 1</td>
+            <td class="border border-gray-400 px-2">Tache 2</td>
+            <td class="border border-gray-400 px-2">Tache 3</td>
+            <td class="border border-gray-400 px-2">Tache 4</td>
+            <td class="border border-gray-400 px-2">Tache 5</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-400 px-2">Durée</td>
+            <td class="border border-gray-400 px-2"> <div id="tache1">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="tache2">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="tache3">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="tache4">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="tache5">  </div></td>
+        </tr>
+        <tr>
+            <td class="border border-gray-400 px-2">Délai livraison</td>
+            <td class="border border-gray-400 px-2"> <div id="Delaitache1">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="Delaitache2">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="Delaitache3">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="Delaitache4">  </div></td>
+            <td class="border border-gray-400 px-2"><div id="Delaitache5">  </div></td>
+        </tr>
+
+    </table>
+    </div>
+
+    <div class="col-span-12">
+    
+        <h3 class="text-left">Etape 2 calcul des retards : <div id="retard"></div></h3>
+        </div>
+</div>
 
     <script src="./renderer.js"></script>
 </body>
