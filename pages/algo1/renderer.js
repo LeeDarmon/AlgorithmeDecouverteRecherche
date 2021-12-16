@@ -1,6 +1,7 @@
 window.addEventListener("DOMContentLoaded", (event) => {
   class tache {
-    constructor(duree, delai) {
+    constructor(id,duree, delai) {
+      this.id = id;
         this.duree = duree;
         this.delai = delai;
     }
@@ -19,7 +20,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   var divTache = [];
 
   for (var i = 0; i < 5; i++) {
-    taches.push(new tache(getRandomIntInclusive(min, max), getRandomIntInclusive(min, max)));
+    taches.push(new tache(i+1,getRandomIntInclusive(min, max), getRandomIntInclusive(min, max)));
     divTache.push({
         tache : document.getElementById(`tache${i+1}`),
         delai : document.getElementById(`Delaitache${i+1}`)
@@ -40,11 +41,22 @@ window.addEventListener("DOMContentLoaded", (event) => {
   // var delaiTache4 = 8;
   // var delaiTache5 = 17;
 
-  taches = taches.sort((a, b) => {
+  let tachesDuree = taches.sort((a, b) => {
+    return a.duree - b.duree;
+  });
+
+
+
+  let tachesSorted = tachesDuree.sort((a, b) => {
     return a.delai - b.delai;
   });
 
-  console.log(taches);
+  console.log(tachesDuree);
+
+  console.log(tachesSorted)
+
+
+
 
   var Pi = 0;
   var Fi = 0;
@@ -53,7 +65,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   results = [];
 
-  for (var t of taches) {
+  for (var t of tachesSorted) {
     Pi = t.duree;
     Fi += Pi;
     Di = t.delai;
@@ -73,7 +85,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
   var total_retard = 0;
 
   for (var chiffre of results) {
-    total_retard += chiffre;
+    if(chiffre > total_retard){
+      total_retard = chiffre
+    }
   }
 
   console.log(total_retard);
