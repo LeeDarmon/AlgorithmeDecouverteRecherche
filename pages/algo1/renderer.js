@@ -45,7 +45,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   });
 
   console.log(taches);
-  
+
   var Pi = 0;
   var Fi = 0;
   var Di = 0;
@@ -53,10 +53,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   results = [];
 
-  for (var tache of taches) {
-    Pi = tache["duree"];
+  for (var t of taches) {
+    Pi = t.duree;
     Fi += Pi;
-    Di = tache["delai"];
+    Di = t.delai;
     // R = Fi - Di;
 
     if (R < 0) {
