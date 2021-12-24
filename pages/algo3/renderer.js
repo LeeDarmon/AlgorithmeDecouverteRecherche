@@ -80,6 +80,7 @@ function Main() {
 
         // -------------------------------------------- //
         tailleCanvas = getRandomIntInclusive(100, 500)
+
         // Check Width //
         if (tailleCanvas === 0) {
             inProgress = false
@@ -95,6 +96,7 @@ function Main() {
 
         // Set Global Arrays //
         g_Cercles = boxes.coords
+        matrice = creerMatrice(tailleCanvas, g_Cercles.length)
         g_Holes = [new Hole(0, 0, tailleCanvas, INFINITY, 1, 0)] // First hole the size of the Infinity with origin Zero as break Case Origin
         // ----------------- //
 
@@ -266,4 +268,27 @@ function _drawCircle(x, y, r, fill, stroke) {
     canvasCTX.lineWidth = 1
     canvasCTX.arc(x, y, r, 0, Math.PI * 2, false);
     canvasCTX.stroke()
+}
+
+function creerMatrice(tailleCvsX, tailleCvsY) {
+    var matrice = new Array()
+    var i;
+    var j;
+    matrice.length = tailleCvsX * 100;
+
+    for(i=0;i<matrice.length;i++){
+        matrice[i] = new Array(tailleCvsY)
+        for(j=0;j<matrice[0].length;j++) {
+            matrice[i][j] = "0"
+        }
+    }
+
+    return matrice;
+}
+function remplirMatrice() {
+
+}
+
+function placerCercle() {
+
 }
