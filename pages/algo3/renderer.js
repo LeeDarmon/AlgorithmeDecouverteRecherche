@@ -99,7 +99,7 @@ function Main() {
         // Set Global Arrays //
         g_Cercles = boxes.coords
         matrice = creerMatrice(g_Cercles.length, tailleCanvas)
-        g_Holes = [new Hole(0, 0, tailleCanvas, INFINITY, 1, 0)] // First hole the size of the Infinity with origin Zero as break Case Origin
+        // g_Holes = [new Hole(0, 0, tailleCanvas, INFINITY, 1, 0)] // First hole the size of the Infinity with origin Zero as break Case Origin
         // ----------------- //
 
         let test = 0
@@ -112,8 +112,10 @@ function Main() {
             if (rid === 0) {
                 g_Cercles[rid].x = r
                 g_Cercles[rid].y = r
-                maxX += r * 2
-                maxY += r * 2
+                // maxX += r * 2
+                // maxY += r * 2
+                circle(r, 1, g_Cercles[rid].x, g_Cercles[rid].y)
+                drawCircle(g_Cercles[rid])
                 matrice = remplirMatrice(g_Cercles[rid].x, g_Cercles[rid].y, g_Cercles[rid].r, rid)
             } else {
                 // if (tailleCanvas * 2 > maxY + (r * 2)) {
@@ -265,11 +267,23 @@ function _drawCircle(x, y, r, fill, stroke) {
     if ((x != r) || (y != r)) {
         canvasCTX.moveTo(x,y)
     }
+
     canvasCTX.fillStyle = fill || "rgb(255,255,255)";
     canvasCTX.strokeStyle = stroke || "rgb(0, 0, 0)"
     canvasCTX.lineWidth = 1
     canvasCTX.arc(x, y, r, 0, Math.PI * 2, false);
     canvasCTX.stroke()
+
+    // Initiate a Circle instance
+    var circle = new fabric.Circle({
+        radius: r,
+        fill: canvasCTX.fillStyle,
+        stroke: canvasCTX.stroke(),
+        strokeWidth: canvasCTX.lineWidth = 1,
+        angle : 0
+    });
+
+    console.log(circle.calcOwnMatrix())
 }
 
 function creerMatrice(tailleCvsX, tailleCvsY) {
@@ -407,4 +421,23 @@ function calculerTrou(id, numTrou, i, j) {
         valSolution = -1
     }
     return valSolution;
+}
+
+function circle(radius, steps, centerX, centerY){
+    var xValues = [centerX];
+    var yValues = [centerY];
+    var table="<tr><th>Step</th><th>X</th><th>Y</th></tr>";
+    // var ctx = document.getElementById("canvas").getContext("2d");
+    canvasCTX.fillStyle = "red"
+    canvasCTX.beginPath();
+    for (var i = 0; i <= steps; i++) {
+        var radian = (2*Math.PI) * (i/steps);
+        xValues[i+1] = centerX + radius * Math.cos(radian);
+        yValues[i+1] = centerY + radius * Math.sin(radian);
+        if(0==i){canvasCTX.moveTo(xValues[i+1],yValues[i+1]);}else{canvasCTX.lineTo(xValues[i+1],yValues[i+1]);}
+        table += "<tr><td>" + i + "</td><td>" + xValues[i+1] + "</td><td>" + yValues[i+1] + "</td></tr>";
+    }
+    canvasCTX.fill();
+    console.log(table);
+    return table;
 }
