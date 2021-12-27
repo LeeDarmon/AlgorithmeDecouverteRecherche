@@ -374,9 +374,15 @@ function meilleurEmplacement(rid) {
                     //     meilleurX = i;
                     //     meilleurY = j;
                     // }
-                    cercleMatrice = algo_Bresenham(g_Cercles[rid].r, rid)
-                    matriceEssai = matrice
-                    matriceEssai = remplirMatriceTest(i,j,g_Cercles[rid].r,rid)
+
+                    valSolution = remplirMatriceTest(i,j,g_Cercles[rid].r,rid)
+                    if (valSolution < meilleurSolution && valSolution > -1) {
+                        meilleurSolution = valSolution
+                        meilleurSolutionID = k
+                        meilleurTrou = matrice[i][j];
+                        meilleurX = i;
+                        meilleurY = j;
+                    }
                 }
             }
         }
@@ -510,7 +516,7 @@ function remplirMatriceTest(x, y, r, id) {
         }
     }
 
-    while (matriceEssai[debutY+bordureMax][debutX] === "X") {
+    while (matrice[debutY+bordureMax][debutX] === "X") {
         debutX--
         finX--
     }
@@ -518,25 +524,24 @@ function remplirMatriceTest(x, y, r, id) {
 
 
     let erreur = true;
+    let compteurTrou;
+    let tailleCercle;
 
     while (erreur === true) {
         debutX++
         finX++
         erreur = false;
-        console.log(matrice)
-        matriceEssai = matrice.slice()
-        let compteurTrou = 0;
-        let tailleCercle = cercleMatrice.length * cercleMatrice[0].length;
+        compteurTrou = 0;
+        tailleCercle = cercleMatrice.length * cercleMatrice[0].length;
         for (i = debutX; i < finX; i++) {
             for (j = debutY; j < finY; j++) {
-                if (matriceEssai[j][i] === "X") {
-                    matriceEssai[j][i] = cercleMatrice[j-debutY][i-debutX]
-                    if (matriceEssai[j][i] === "X") {
+                if (matrice[j][i] === "X") {
+                    if (cercleMatrice[j-debutY][i-debutX] === "X") {
                         compteurTrou++
                     }
                 } else {
                     if (cercleMatrice[j-debutY][i-debutX] !== "X") {
-                        console.log("Erreur à la ligne " + j + " et à la colonne " + i)
+                        // console.log("Erreur à la ligne " + j + " et à la colonne " + i)
                         erreur = true;
                     }
                 }
@@ -547,10 +552,6 @@ function remplirMatriceTest(x, y, r, id) {
 
     console.log("Taille du cercle : " + tailleCercle + " comprenant " + compteurTrou + " trou")
 
-
-
-    console.log(cercleMatrice)
-    console.log(matriceEssai)
-    return matriceEssai;
+    return compteurTrou / tailleCercle;
 
 }
