@@ -4,26 +4,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main</title>    
-    <link rel="stylesheet" href="../tailwind.css">
+    <title>Main</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
 </head>
-<body class="bg-gray-800 text-gray-200 w-full flex justify-center align-middle">
-    
-    <div class="grid grid-cols-1 gap-4 align-middle justify-items-center">
-        <h1 class="font-bold font-lg p-4">Découverte de la recherche</h1>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 1 : Ordonnancement
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 2 : Disque et rectangle
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 3 : Bande de tissue
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 4 : Conteneur et sphere
-        </a>
+<body>
+    <div id="canvas">
+        <span class="grid-size" style="margin-top: 3px; margin-left: -2px;">0</span>
+        <span class="grid-size" style="margin-top: 3px; margin-left: 328px;" id="width-value">0</span>
+        <span class="grid-size" style="margin-top: 550px; margin-left: -2px;" id="height-value">0</span>
+        <canvas id="output-canvas"></canvas>
     </div>
+
+    <div class="coords-box">
+        Boxes:
+        <p></p>
+        <button class="controls-button" style="width: 175px; float: right;" onclick="randomizeCoords()">Generate Boxes</button>
+        <p></p>
+        <textarea id="box-coordinates" placeholder="width, height (ex: 100, 50)"></textarea>
+    </div>
+
+    <div class="control-box" style="text-align: center;">
+        <button class="controls-button" onclick="Main()">Start</button>
+        <p></p>
+        <button class="controls-button" onclick="Reset()">Reset</button>
+    </div>
+
 
     <script src="./renderer.js"></script>
 </body>
