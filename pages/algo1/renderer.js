@@ -185,6 +185,8 @@ console.log(moyenne);
 
 
 // }
+
+//test
 var tabOrder = [];
  
 function calculRetard(tache){
