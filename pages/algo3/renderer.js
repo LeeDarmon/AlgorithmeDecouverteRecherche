@@ -19,6 +19,7 @@ let nbCerclePlace = 0;
 let matriceEssai = [];
 let meilleurX = 0;
 let meilleurY = 0;
+let tailleMaxCanvas = 0;
 // _G Elements //
 let main = document.querySelector("main");
 let state = document.getElementById("status");
@@ -58,7 +59,7 @@ function getRandomIntInclusive(min, max) {
 function randomizeCoords() {
     let coords = ""
     // let nbCercle = getRandomIntInclusive(10,100)
-    let nbCercle = 3
+    let nbCercle = 10
     for (let i = 0; i < nbCercle; i++) {
         coords = `${coords + Random(100)}`
         if (i !== nbCercle - 1) coords = `${coords}\n`
@@ -101,14 +102,13 @@ function Main() {
                 g_Cercles[rid].x = r
                 g_Cercles[rid].y = r
                 matrice = remplirMatrice(g_Cercles[rid].y, g_Cercles[rid].x, g_Cercles[rid].r, rid)
-                drawCircle(g_Cercles[rid])
+                tailleMaxCanvas = g_Cercles[rid].r
             } else {
                 // if (tailleCanvas * 2 > maxY + (r * 2)) {
-                g_Cercles = meilleurEmplacement(rid)
+                g_Cercles = meilleurEmplacement(rid, false)
                 if (g_Cercles[rid].y + g_Cercles[rid].r > shortestHeight) {
                     shortestHeight = g_Cercles[rid].y + g_Cercles[rid].r
                 }
-                // matrice = remplirMatrice(meilleurX, meilleurY, g_Cercles[rid].r, rid)
             }
 
             // ----------------------------------- //
@@ -117,18 +117,6 @@ function Main() {
             console.log(g_Cercles)
             nbCerclePlace++;
         }
-        // let endRectArea = 0
-
-        // g_Cercles.forEach(cercle => {
-        //     let r = cercle.r
-        //
-        //     endRectArea = endRectArea + r * 2
-        //
-        //     if ((cercle.r) > shortestHeight) {
-        //         shortestHeight = cercle.r
-        //     }
-        // })
-        // ------------------------------ //
 
         // (Show + Scale) Height On Canvas //
         canvas.style.height = shortestHeight + "px"
@@ -152,7 +140,7 @@ function Main() {
         // ------------------------------ //
         // Draw + Show Rectangles //
         g_Cercles.forEach(cercle => {
-            let nCercle = new Cercle(cercle.x, cercle.y, cercle.r, cercle.id, cercle.origin)
+            let nCercle = new Cercle(cercle.y, cercle.x, cercle.r, cercle.id, cercle.origin)
             drawCircle(nCercle)
         })
 
@@ -245,7 +233,7 @@ function creerMatrice(tailleCvsX, tailleCvsY) {
     var i;
     var j;
 
-    for (i=0; i < tailleCvsX; i++) {
+    for (i = 0; i < tailleCvsX; i++) {
         matrice.length += g_Cercles[i].r * 2
     }
 
@@ -268,17 +256,11 @@ function remplirMatrice(x, y, r, id) {
     let finX;
     let debutY;
     let finY;
-    // if (id === 0) {
-        debutX = x - r
-        debutY = y - r
-        finX = x + r
-        finY = y + r
-    // } else {
-    //     debutX = x
-    //     debutY = y
-    //     finX = x + r * 2
-    //     finY = y + r * 2
-    // }
+
+    debutX = x - r
+    debutY = y - r
+    finX = x + r
+    finY = y + r
 
     debutX = Math.round(debutX)
     debutY = Math.round(debutY)
@@ -287,29 +269,29 @@ function remplirMatrice(x, y, r, id) {
 
     for (i = debutX; i < finX; i++) {
         for (j = debutY; j < finY; j++) {
-            if (matrice[i][j] === "X") {
-                matrice[i][j] = cercleMatrice[i-debutX][j-debutY]
+            if (matrice[i][j] === "X" || matrice[i][j].includes("coin") === true) {
+                matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
             } else {
-                if (cercleMatrice[i-debutX][j-debutY] !== "X") {
+                if (cercleMatrice[i - debutX][j - debutY] !== "X") {
                     console.log("ALERTE !")
                 }
             }
-            matrice[i][j] = cercleMatrice[i-debutX][j-debutY]
+ //           matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
         }
     }
 
-    if (matrice[finX+1][debutY] === "X") {
-        matrice[finX+1][debutY] = "coiny" + valId;
+    if (matrice[finX + 1][debutY] === "X") {
+        matrice[finX + 1][debutY] = "coiny" + valId;
     } else {
-        while (matrice[finX+1][debutY] !== "X") {
+        while (matrice[finX + 1][debutY] !== "X") {
             debutY++
         }
-        matrice[finX+1][debutY] = "coiny" + valId;
+        matrice[finX + 1][debutY] = "coiny" + valId;
     }
-    if (matrice[debutX][finY+1] === "X") {
-        matrice[debutX][finY+1] = "coinx" + valId;
+    if (matrice[debutX][finY + 1] === "X") {
+        matrice[debutX][finY + 1] = "coinx" + valId;
     } else {
-        while (matrice[debutX][finY+1] !== "X") {
+        while (matrice[debutX][finY + 1] !== "X") {
             debutX++
         }
     }
@@ -341,7 +323,7 @@ function placerCercle(id, idVoisin, axe) {
     return g_Cercles
 }
 
-function meilleurEmplacement(rid) {
+function meilleurEmplacement(rid, bool) {
     let i;
     let j;
     let k;
@@ -352,13 +334,9 @@ function meilleurEmplacement(rid) {
     let numTrou;
     let meilleurSolution = 10 ** 10;
     let meilleurSolutionID;
-    let meilleurTrou;
     let meilleurTrouX;
     let meilleurTrouY;
     let echange;
-    // let meilleurX;
-    // let meilleurY;
-    let cercleMatrice;
     let axe;
     for (i = 0; i < matrice.length; i++) {
         for (j = 0; j < matrice[0].length; j++) {
@@ -366,26 +344,26 @@ function meilleurEmplacement(rid) {
             if (position === true) {
                 longueurChaine = matrice[i][j].length - 4;
                 numTrou = matrice[i][j].substr(5, longueurChaine)
-                axe = matrice[i][j].substr(4, longueurChaine-1)
+                axe = matrice[i][j].substr(4, longueurChaine - 1)
                 numTrou = parseInt(numTrou, 10)
                 for (k = rid; k < g_Cercles.length; k++) {
-                    valSolution = remplirMatriceTest(i,j,g_Cercles[k].r,k, axe, numTrou)
-                    if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
-                        meilleurSolution = valSolution
-                        meilleurSolutionID = k
-                        meilleurTrouX = meilleurX
-                        meilleurTrouY = meilleurY
-                        // meilleurTrou = matrice[i][j]
-                        // meilleurX = i;
-                        // meilleurY = j;
+                    if ((g_Cercles[k].r * 2 <= tailleMaxCanvas) || (bool === true)) {
+                        valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
+                        if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
+                            meilleurSolution = valSolution
+                            meilleurSolutionID = k
+                            meilleurTrouX = meilleurX
+                            meilleurTrouY = meilleurY
+                        }
+                    }
+
+                    if (meilleurSolution === 10**10) {
+                        meilleurEmplacement(rid, true)
                     }
                 }
             }
         }
     }
-    // if (meilleurX >= 0 && meilleurY >= 0) {
-    //      matrice[meilleurX][meilleurY] = "X"
-    // }
     echange = g_Cercles[rid]
     g_Cercles[rid] = g_Cercles[meilleurSolutionID];
     g_Cercles[meilleurSolutionID] = echange;
@@ -394,30 +372,6 @@ function meilleurEmplacement(rid) {
     matrice = remplirMatrice(g_Cercles[rid].x, g_Cercles[rid].y, g_Cercles[rid].r, rid)
     // g_Cercles = placerCercle(rid, numTrou, axe)
     return g_Cercles;
-}
-
-function calculerTrou(id, numTrou, i, j) {
-    // on test si le cercle passe
-    let debutX;
-    let debutY;
-    let largeurCercle = g_Cercles[id].r * 2;
-    let bool = true;
-    let valSolution;
-
-    for (debutX = i; debutX < i + largeurCercle; debutX++) {
-        for (debutY = j; debutY < j + largeurCercle; debutY++) {
-            if (matrice[i][j].includes("coin") === false && matrice[i][j] !== "X") {
-                bool = false;
-            }
-        }
-    }
-
-    if (bool === true) {
-        valSolution = (Math.sqrt(Math.pow((g_Cercles[id].x - g_Cercles[numTrou].x), 2) + Math.pow((g_Cercles[id].y - g_Cercles[numTrou].y), 2)) - (g_Cercles[id].r - g_Cercles[numTrou].r))
-    } else {
-        valSolution = -1
-    }
-    return valSolution;
 }
 
 function algo_Bresenham(rayon, id) {
@@ -518,72 +472,61 @@ function remplirMatriceTest(x, y, r, id, axe, numTrou) {
     } else {
 
         // On regarde où se termine la bordure gauche du cercle
-        for (i=0;i<cercleMatrice.length;i++){
+        for (i = 0; i < cercleMatrice.length; i++) {
             if (cercleMatrice[i][0] !== "X") {
                 bordureMax = i + 1;
             }
         }
 
         if (axe === "x") {
-            while (matrice[debutX+bordureMax][debutY] === "X") {
+            while (matrice[debutX + bordureMax][debutY] === "X") {
                 debutY--
                 finY--
             }
         } else {
-            while (matrice[debutX][debutY+bordureMax] === "X") {
+            while (matrice[debutX][debutY + bordureMax] === "X") {
                 debutX--
                 finX--
             }
         }
     }
 
-    // if (debutY+bordureMax < matrice.length - cercleMatrice.length && debutX+bordureMax < matrice[0].length - cercleMatrice[0].length) {
 
+    let erreur = true;
+    let compteurTrou;
+    let tailleCercle;
 
+    while (erreur === true) {
+        if (axe === "x") {
+            debutY++
+            finY++
+        } else {
+            debutX++
+            finX++
+        }
+        erreur = false;
+        compteurTrou = 0;
+        tailleCercle = cercleMatrice.length * cercleMatrice[0].length;
 
-        let erreur = true;
-        let compteurTrou;
-        let tailleCercle;
-
-        while (erreur === true) {
-            if (axe === "x") {
-                debutY++
-                finY++
-            } else {
-                debutX++
-                finX++
-            }
-            erreur = false;
-            compteurTrou = 0;
-            tailleCercle = cercleMatrice.length * cercleMatrice[0].length;
-
-                for (i = debutX; i < finX; i++) {
-                    for (j = debutY; j < finY; j++) {
-                        if (matrice[i][j] === "X") {
-                            if (cercleMatrice[i - debutX][j - debutY] === "X") {
-                                compteurTrou++
-                            }
-                        } else {
-                            if (cercleMatrice[i - debutX][j - debutY] !== "X") {
-                                erreur = true;
-                            }
-                        }
+        for (i = debutX; i < finX; i++) {
+            for (j = debutY; j < finY; j++) {
+                if (matrice[i][j] === "X") {
+                    if (cercleMatrice[i - debutX][j - debutY] === "X") {
+                        compteurTrou++
+                    }
+                } else {
+                    if (cercleMatrice[i - debutX][j - debutY] !== "X") {
+                        erreur = true;
                     }
                 }
-
+            }
         }
 
-        meilleurX = debutX
-        meilleurY = debutY
+    }
 
-        return compteurTrou / tailleCercle;
-    // } else {
-    //     meilleurX = debutX
-    //     meilleurY = debutY
-    //     return 1
-    // }
+    meilleurX = debutX
+    meilleurY = debutY
 
-
-
+    return compteurTrou / tailleCercle;
 
 }
