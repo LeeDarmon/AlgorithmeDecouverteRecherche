@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", (event) => {
+
   class tache {
     constructor(id,duree, delai) {
       this.id = id;
@@ -34,6 +34,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
   var Di = 0;
   var R = 0;
 
+  var total_retard = 0;
+  var somme_retard_initial = 0;
+
   results = [];
 
   
@@ -55,139 +58,153 @@ window.addEventListener("DOMContentLoaded", (event) => {
   console.log(results)
 
 
-  var total_retard = 0;
-
   for (var c of results) {
-      total_retard += c
+    somme_retard_initial += c
 
   }
 
-  console.log(total_retard);
+  for (var chiffre of results) {
+    if(chiffre > total_retard){
+      greater_retard_initial = chiffre
+    }
+  }
+
+  var moyenne = somme_retard_initial / results.length
+
+  var div_somme_retard_initial = document.getElementById("somme_retard_initial");
+  div_somme_retard_initial.innerHTML = somme_retard_initial;
+
+  var div_greater_retard_initial = document.getElementById("greater_retard_initial");
+  div_greater_retard_initial.innerHTML = greater_retard_initial;
+
+  var div_moyenne_retard_initial = document.getElementById("moyenne_retard_initial");
+  div_moyenne_retard_initial.innerHTML = moyenne;
 
   //critère 1 minimiser le plus grand retard
-  // let tachesDuree = taches.sort((a, b) => {
-  //   return a.duree - b.duree;
-  // });
-
-  // let tachesSorted = tachesDuree.sort((a, b) => {
-  //   return a.delai - b.delai;
-  // });
-
-  // console.log(tachesDuree);
-
-  // console.log(tachesSorted)
-
-  // var Pi = 0;
-  // var Fi = 0;
-  // var Di = 0;
-  // var R = 0;
-
-  // results = [];
-
+  function Critere1(){
+    let tachesDuree = taches.sort((a, b) => {
+      return a.duree - b.duree;
+    });
   
-  // for (var t of tachesSorted) {
-  //   Pi = t.duree;
-  //   Fi += Pi;
-  //   Di = t.delai;
-  //   // R = Fi - Di;
-
-  //   if (R < 0) {
-  //     R += Fi - Di;
-  //   } else {
-  //     R = Fi - Di;
-  //   }
-
-  //   results.push(R);
-  // }
-
-
-
-  // console.log(results);
-
-  // var total_retard = 0;
-
-  // for (var chiffre of results) {
-  //   if(chiffre > total_retard){
-  //     total_retard = chiffre
-  //   }
-  // }
-
-  // console.log(total_retard);
-
-  // var divretard = document.getElementById("retard");
-  // divretard.innerHTML = total_retard;
+    let tachesSorted = tachesDuree.sort((a, b) => {
+      return a.delai - b.delai;
+    });
+  
+    console.log(tachesDuree);
+  
+    console.log(tachesSorted)
+  
+    var Pi = 0;
+    var Fi = 0;
+    var Di = 0;
+    var R = 0;
+  
+    results = [];
+  
+    
+    for (var t of tachesSorted) {
+      Pi = t.duree;
+      Fi += Pi;
+      Di = t.delai;
+      // R = Fi - Di;
+  
+      if (R < 0) {
+        R += Fi - Di;
+      } else {
+        R = Fi - Di;
+      }
+  
+      results.push(R);
+    }
+  
+  
+  
+    console.log(results);
+  
+    var total_retard = 0;
+  
+    for (var chiffre of results) {
+      if(chiffre > total_retard){
+        total_retard = chiffre
+      }
+    }
+  
+    console.log(total_retard);
+  
+    var divretard = document.getElementById("retard_final");
+    divretard.innerHTML = total_retard;
+  }
+ 
 
 //critère 2 minimiser le retard moyen
 
+function critere2(){
+  let tachesDuree = taches.sort((a, b) => {
+    return a.duree - b.duree;
+  });
+  
+  let tachesSorted = tachesDuree.sort((a, b) => {
+    return a.delai - b.delai;
+  });
+  
+  console.log(tachesDuree);
+  
+  console.log(tachesSorted)
+  
+  var Pi = 0;
+  var Fi = 0;
+  var Di = 0;
+  var R = 0;
+  
+  results = [];
+  
+  
+  for (var t of tachesSorted) {
+    Pi = t.duree;
+    Fi += Pi;
+    Di = t.delai;
+    // R = Fi - Di;
+  
+    if (R < 0) {
+      R += Fi - Di;
+    } else {
+      R = Fi - Di;
+    }
+  
+    results.push(R);
+  }
+  
+  
+  
+  console.log(results);
+  
+  var total_retard = 0;
+  
+  for (var chiffre of results) {
+      total_retard += chiffre
+  
+  }
+  
+  var moyenne_c2 = total_retard / results.length
+  
+  
+  console.log(moyenne_c2);
 
-// let tachesDuree = taches.sort((a, b) => {
-//   return a.duree - b.duree;
-// });
-
-// let tachesSorted = tachesDuree.sort((a, b) => {
-//   return a.delai - b.delai;
-// });
-
-// console.log(tachesDuree);
-
-// console.log(tachesSorted)
-
-// var Pi = 0;
-// var Fi = 0;
-// var Di = 0;
-// var R = 0;
-
-// results = [];
-
-
-// for (var t of tachesSorted) {
-//   Pi = t.duree;
-//   Fi += Pi;
-//   Di = t.delai;
-//   // R = Fi - Di;
-
-//   if (R < 0) {
-//     R += Fi - Di;
-//   } else {
-//     R = Fi - Di;
-//   }
-
-//   results.push(R);
-// }
+  var divretard = document.getElementById("retard_final");
+divretard.innerHTML = moyenne_c2;
+}
 
 
 
-// console.log(results);
-
-// var total_retard = 0;
-
-// for (var chiffre of results) {
-//     total_retard += chiffre
-
-// }
-
-// var moyenne = total_retard / results.length
-
-
-// console.log(moyenne);
-
-// var divretard = document.getElementById("retard");
-// divretard.innerHTML = total_retard;
 
   //critère 3 minimiser la somme des retards
-
-
+function critere3(){
   let tachesDuree = taches.sort((a, b) => {
     return a.duree - b.duree;
   });
 
-  let tachesSorted = tachesDuree.sort((a, b) => {
-    return a.delai - b.delai;
-  });
+console.log(tachesDuree)
 
-  console.log(tachesDuree);
-
-  console.log(tachesSorted)
 
   var Pi = 0;
   var Fi = 0;
@@ -197,7 +214,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   results = [];
 
   
-  for (var t of tachesSorted) {
+  for (var t of tachesDuree) {
     Pi = t.duree;
     Fi += Pi;
     Di = t.delai;
@@ -225,8 +242,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   console.log(total_retard);
 
-  var divretard = document.getElementById("retard");
+  var divretard = document.getElementById("retard_final");
   divretard.innerHTML = total_retard;
+}
+
+
+
+ 
 
     
 
@@ -238,4 +260,4 @@ window.addEventListener("DOMContentLoaded", (event) => {
   
 
 
-});
+

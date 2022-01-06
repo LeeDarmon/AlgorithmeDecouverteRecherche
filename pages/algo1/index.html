@@ -49,8 +49,35 @@
 
     <div class="col-span-12">
     
-        <h3 class="text-left">Etape 2 calcul des retards : <div id="retard"></div></h3>
+        <h3 class="text-left">Etape 2 calcul de la somme des retards: <div id="somme_retard_initial"></div></h3>
+        <h3 class="text-left">calcul du plus grand retard: <div id="greater_retard_initial"></div></h3>
+        <h3 class="text-left">calcul de la moyenne: <div id="moyenne_retard_initial"></div></h3>
         </div>
+
+    
+
+        <div class="col-span-12">
+    
+            <h3 class="text-left">Etape 3 choix du critere : <div id="retard_initial"></div></h3>
+            Critere 1 : minimiser le plus grand retard <br>
+            Critere 2 : minimiser la moyenne des retards<br>
+            Critere 3 : minimiser la somme des retards
+            </div>
+
+        <div class="col-span-12">
+            <div class="row">
+                <button type="button" id="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="Critere1()">Critere1</button>
+                <button type="button" id="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="critere2()">Critere2</button>
+                <button type="button" id="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="critere3()">Critere3</button>
+            </div>
+    
+            
+            </div>
+            <div class="col-span-12">
+    
+                <h3 class="text-left">Etape 3 resultat du critere : <div id="retard_final"></div></h3>
+                </div>
+        
 </div>
 
     <script src="./renderer.js"></script>
