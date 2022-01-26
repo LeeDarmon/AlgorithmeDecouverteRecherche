@@ -20,6 +20,7 @@ let matriceEssai = [];
 let meilleurX = 0;
 let meilleurY = 0;
 let tailleMaxCanvas = 0;
+let largeurUtilise = 0;
 // _G Elements //
 let main = document.querySelector("main");
 let state = document.getElementById("status");
@@ -102,7 +103,7 @@ function Main() {
                 g_Cercles[rid].x = r
                 g_Cercles[rid].y = r
                 matrice = remplirMatrice(g_Cercles[rid].y, g_Cercles[rid].x, g_Cercles[rid].r, rid)
-                tailleMaxCanvas = g_Cercles[rid].r
+                // tailleMaxCanvas = g_Cercles[rid].r
             } else {
                 // if (tailleCanvas * 2 > maxY + (r * 2)) {
                 g_Cercles = meilleurEmplacement(rid, false)
@@ -296,6 +297,7 @@ function remplirMatrice(x, y, r, id) {
         }
     }
 
+    largeurUtilise += r * 2;
     console.log("Cercle " + id + " dans la matrice")
     console.log(matrice);
     return matrice;
@@ -347,18 +349,14 @@ function meilleurEmplacement(rid, bool) {
                 axe = matrice[i][j].substr(4, longueurChaine - 1)
                 numTrou = parseInt(numTrou, 10)
                 for (k = rid; k < g_Cercles.length; k++) {
-                    if ((g_Cercles[k].r * 2 <= tailleMaxCanvas) || (bool === true)) {
-                        valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
-                        if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
+                    valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
+                    if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
+                        if (largeurUtilise >= tailleCanvas - 20 || axe === 'x') {
                             meilleurSolution = valSolution
                             meilleurSolutionID = k
                             meilleurTrouX = meilleurX
                             meilleurTrouY = meilleurY
                         }
-                    }
-
-                    if (meilleurSolution === 10**10) {
-                        meilleurEmplacement(rid, true)
                     }
                 }
             }
@@ -487,6 +485,7 @@ function remplirMatriceTest(x, y, r, id, axe, numTrou) {
             while (matrice[debutX][debutY + bordureMax] === "X") {
                 debutX--
                 finX--
+                console.log(debutX)
             }
         }
     }
