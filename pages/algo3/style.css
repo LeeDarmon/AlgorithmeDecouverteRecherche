@@ -132,7 +132,7 @@ input:checked+.slider:before {
 /* Output */
 
 canvas {
-    background-color: #606060;
+    background-color: rgba(255, 255, 255, 0);
 
     width: 332px;
     height: 532px;
@@ -147,7 +147,7 @@ canvas {
 
 #output-box {
     position: absolute;
-    background-color: #404040;
+    background-color: rgb(64, 64, 64);
     width: 290px;
     height: auto;
     border: rgb(100, 100, 100);
@@ -183,7 +183,7 @@ canvas {
 }
 
 .grid-size {
-    transform-origin: center right;
+    transform-origin: center;
 
     position: absolute;
     color: white;

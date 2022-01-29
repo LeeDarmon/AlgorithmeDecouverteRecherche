@@ -59,10 +59,9 @@ function getRandomIntInclusive(min, max) {
 
 function randomizeCoords() {
     let coords = ""
-    // let nbCercle = getRandomIntInclusive(10,100)
-    let nbCercle = 10
+    let nbCercle = getRandomIntInclusive(10,100)
     for (let i = 0; i < nbCercle; i++) {
-        coords = `${coords + Random(100)}`
+        coords = `${coords + Random(50)}`
         if (i !== nbCercle - 1) coords = `${coords}\n`
     }
     coordinateBox.value = coords
@@ -74,7 +73,7 @@ function Main() {
         inProgress = true // Stop user from Stopping Current Sort or Starting a New Sort, etc ...
 
         // -------------------------------------------- //
-        tailleCanvas = getRandomIntInclusive(400, 1000)
+        tailleCanvas = getRandomIntInclusive(200, 500)
 
         // Check Width //
         if (tailleCanvas === 0) {
@@ -106,7 +105,7 @@ function Main() {
                 // tailleMaxCanvas = g_Cercles[rid].r
             } else {
                 // if (tailleCanvas * 2 > maxY + (r * 2)) {
-                g_Cercles = meilleurEmplacement(rid, false)
+                g_Cercles = meilleurEmplacement(rid)
                 if (g_Cercles[rid].y + g_Cercles[rid].r > shortestHeight) {
                     shortestHeight = g_Cercles[rid].y + g_Cercles[rid].r
                 }
@@ -205,7 +204,8 @@ function clearCanvas() {
 }
 
 function getRandomColor() {
-    color = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
+    // color = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
+    color = Math.floor(Math.random()*16777215).toString(16);
     return color;
 }
 
@@ -213,21 +213,25 @@ function drawCircle(shape) {
     const x = shape.x
     const y = shape.y
     const r = shape.r
+    const id = shape.id
 
-    _drawCircle(x, y, r, getRandomColor(), "rgb(50, 50, 50)") // Draw Rectangle
+    _drawCircle(x, y, r, id, getRandomColor(), "rgb(50, 50, 50)") // Draw Rectangle
 
 }
 
-function _drawCircle(x, y, r, fill, stroke) {
+function _drawCircle(x, y, r, id, fill, stroke) {
     if ((x != r) || (y != r)) {
         canvasCTX.moveTo(x, y)
     }
-
-    canvasCTX.fillStyle = fill || "rgb(255,255,255)";
-    canvasCTX.strokeStyle = stroke || "rgb(0, 0, 0)"
+    canvasCTX.beginPath()
+    canvasCTX.fillStyle = "#" + getRandomColor();
+    canvasCTX.strokeStyle = stroke;
+    canvasCTX.font = '12px serif';
+    canvasCTX.fillText(id, x, y);
     canvasCTX.lineWidth = 1
     canvasCTX.arc(x, y, r, 0, Math.PI * 2, false);
     canvasCTX.stroke()
+    canvasCTX.fill()
 }
 
 function creerMatrice(tailleCvsX, tailleCvsY) {
@@ -244,7 +248,7 @@ function creerMatrice(tailleCvsX, tailleCvsY) {
             matrice[i][j] = "X"
         }
     }
-    console.log(matrice)
+    // console.log(matrice)
     return matrice;
 }
 
@@ -277,7 +281,7 @@ function remplirMatrice(x, y, r, id) {
                     console.log("ALERTE !")
                 }
             }
- //           matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
+            //           matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
         }
     }
 
@@ -298,7 +302,7 @@ function remplirMatrice(x, y, r, id) {
     }
 
     largeurUtilise += r * 2;
-    console.log("Cercle " + id + " dans la matrice")
+    console.log("Cercle " + id + " dans la matrice");
     console.log(matrice);
     return matrice;
 
@@ -325,7 +329,7 @@ function placerCercle(id, idVoisin, axe) {
     return g_Cercles
 }
 
-function meilleurEmplacement(rid, bool) {
+function meilleurEmplacement(rid) {
     let i;
     let j;
     let k;
@@ -340,28 +344,48 @@ function meilleurEmplacement(rid, bool) {
     let meilleurTrouY;
     let echange;
     let axe;
+    let meilleurCoin;
+    let minLigne = 10 ** 10;
+    let boolPremiereLigne = false
     for (i = 0; i < matrice.length; i++) {
         for (j = 0; j < matrice[0].length; j++) {
             position = matrice[i][j].includes("coin")
             if (position === true) {
                 longueurChaine = matrice[i][j].length - 4;
                 numTrou = matrice[i][j].substr(5, longueurChaine)
-                axe = matrice[i][j].substr(4, longueurChaine - 1)
+                axe = matrice[i][j].substr(4, 1)
                 numTrou = parseInt(numTrou, 10)
                 for (k = rid; k < g_Cercles.length; k++) {
                     valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
                     if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
-                        if (largeurUtilise >= tailleCanvas - 20 || axe === 'x') {
+                        // console.log(largeurUtilise, tailleCanvas - 20)
+                        // console.log(axe)
+                        // console.log(boolPremiereLigne)
+                        if (largeurUtilise < tailleCanvas - 20 && axe === 'x' && boolPremiereLigne === false) {
                             meilleurSolution = valSolution
                             meilleurSolutionID = k
                             meilleurTrouX = meilleurX
                             meilleurTrouY = meilleurY
+                            meilleurCoin = matrice[i][j]
+                        } else if (largeurUtilise >= tailleCanvas - 50) {
+                            console.log(minLigne)
+                            if (minLigne > meilleurX) {
+                                boolPremiereLigne   = true
+                                minLigne = meilleurX
+                                meilleurSolution = valSolution
+                                meilleurSolutionID = k
+                                meilleurTrouX = meilleurX
+                                meilleurTrouY = meilleurY
+                                meilleurCoin = matrice[i][j]
+                            }
+
                         }
                     }
                 }
             }
         }
     }
+    console.log(meilleurCoin)
     echange = g_Cercles[rid]
     g_Cercles[rid] = g_Cercles[meilleurSolutionID];
     g_Cercles[meilleurSolutionID] = echange;
@@ -459,17 +483,17 @@ function remplirMatriceTest(x, y, r, id, axe, numTrou) {
     let cercleMatrice;
     let bordureMax;
     cercleMatrice = algo_Bresenham(r, id)
-    if (g_Cercles[id].r > g_Cercles[numTrou].r) {
-        if (axe === "x") {
-            debutY = 0
-            finY = r * 2
-        } else {
-            debutX = 0
-            finX = r * 2
-        }
-    } else {
+    // if (g_Cercles[id].r > g_Cercles[numTrou].r) {
+    //     if (axe === "x") {
+    //         debutY = 0
+    //         finY = r * 2
+    //     } else {
+    //         debutX = 0
+    //         finX = r * 2
+    //     }
+    // } else {
 
-        // On regarde où se termine la bordure gauche du cercle
+        // // On regarde où se termine la bordure gauche du cercle
         for (i = 0; i < cercleMatrice.length; i++) {
             if (cercleMatrice[i][0] !== "X") {
                 bordureMax = i + 1;
@@ -477,25 +501,24 @@ function remplirMatriceTest(x, y, r, id, axe, numTrou) {
         }
 
         if (axe === "x") {
-            while (matrice[debutX + bordureMax][debutY] === "X") {
+            while (matrice[debutX + bordureMax][debutY] === "X" && debutY !== 0) {
                 debutY--
                 finY--
             }
         } else {
-            while (matrice[debutX][debutY + bordureMax] === "X") {
+            while (matrice[debutX][debutY + bordureMax] === "X" && debutX !== 0) {
                 debutX--
                 finX--
-                console.log(debutX)
             }
         }
-    }
+    // }
 
 
     let erreur = true;
     let compteurTrou;
     let tailleCercle;
 
-    while (erreur === true) {
+    while (erreur === true && finY < matrice[debutX].length && finX < matrice.length) {
         if (axe === "x") {
             debutY++
             finY++
@@ -523,9 +546,14 @@ function remplirMatriceTest(x, y, r, id, axe, numTrou) {
 
     }
 
-    meilleurX = debutX
-    meilleurY = debutY
+    if (erreur === true) {
+        return -1;
+    } else {
+        meilleurX = debutX
+        meilleurY = debutY
 
-    return compteurTrou / tailleCercle;
+        return compteurTrou / tailleCercle;
+    }
+
 
 }
