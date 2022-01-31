@@ -50,7 +50,8 @@ function getRandomIntInclusive(min, max) {
 // Génère les cercles et attribut un rayon pour chaque cercle
 function randomizeCoords() {
     let coords = ""
-    let nbCercle = getRandomIntInclusive(10, 100)
+    // let nbCercle = getRandomIntInclusive(10, 100)
+    let nbCercle = 10
     for (let i = 0; i < nbCercle; i++) {
         coords = `${coords + Random(50)}`
         if (i !== nbCercle - 1) coords = `${coords}\n`
@@ -65,7 +66,8 @@ function Main() {
         inProgress = true
 
         // Largeur de la bande (fixe)
-        tailleCanvas = getRandomIntInclusive(200, 500)
+        // tailleCanvas = getRandomIntInclusive(200, 500)
+        tailleCanvas = 250
 
         // Vérification de la taille
         if (tailleCanvas === 0) {
