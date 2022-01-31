@@ -7,11 +7,14 @@
         <title>Main</title>
         <link rel="stylesheet" href="../tailwind.css" />
     </head>
-    <body class="bg-gray-800 text-gray-200 flex flex-col">
+    <body class="bg-gray-800 text-gray-200 flex flex-col place-items-center">
         <script src="./renderer.js"></script>
 
         <h1>Spheres dans un conteneur</h1>
-        <button class="bg-green-400 hover:bg-green-800" onclick="btnGenerate()">
+        <button
+            class="p-2 bg-green-400 hover:bg-green-800 rounded"
+            onclick="btnGenerate()"
+        >
             Generer les spheres
         </button>
 
@@ -19,11 +22,14 @@
 
         <hr class="my-4" />
 
-        <button class="bg-green-400 hover:bg-green-800" onclick="mainLoop()">
+        <button
+            class="p-2 bg-green-400 hover:bg-green-800 rounded"
+            onclick="mainLoop()"
+        >
             Démarrer la simulation
         </button>
 
-        <table>
+        <table class="mb-4">
             <tr>
                 <th>En cours d'execution</th>
                 <th id="Exe">Non</th>

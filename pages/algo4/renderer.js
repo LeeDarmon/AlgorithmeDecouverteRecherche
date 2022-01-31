@@ -31,6 +31,7 @@ class Sphere {
     }
 
     applyVecteur(time, vecteur = this.vel) {
+        console.log(vecteur.x, time);
         //time en nombre de seconde
         this.coord.x += vecteur.x * time;
         this.coord.y += vecteur.y * time;
@@ -250,22 +251,29 @@ function detectCollision(spheres, i) {
 }
 
 function resolveCollisionSphere(s1, s2) {
+    console.log("col", s1, s2, s1.vel.x);
     let n = 0.9 * ((s1.vel.norme() + s2.vel.norme()) / 2);
 
     let s1s2 = Vecteur3.makeFrom(s1.coord, s2.coord);
     let s2s1 = Vecteur3.makeFrom(s2.coord, s1.coord);
 
-    let lambda = calcLambda(n, s1s2);
+    if (n != 0) {
+        let lambda = calcLambda(n, s1s2);
+        s1.vel = s2s1.multiplie(lambda);
+        s2.vel = s1s2.multiplie(lambda);
+    }
 
-    s1.vel = s2s1.multiplie(lambda);
-    s2.vel = s1s2.multiplie(lambda);
+    console.log("sorti col", s1, s2, s1.vel.x);
 }
 
 function calcLambda(n, vec) {
-    return Math.sqrt(
-        Math.pow(n, 2) /
-            (Math.pow(vec.x, 2) + Math.pow(vec.y, 2), Math.pow(vec.z, 2))
-    );
+    let down = Math.pow(vec.x, 2) + Math.pow(vec.y, 2) + Math.pow(vec.z, 2);
+
+    if (down != 0) {
+        return Math.sqrt(Math.pow(n, 2) / down);
+    } else {
+        return 1;
+    }
 }
 
 async function mainLoop() {
