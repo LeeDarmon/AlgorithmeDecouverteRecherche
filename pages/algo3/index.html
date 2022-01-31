@@ -16,18 +16,26 @@
         <canvas id="output-canvas"></canvas>
     </div>
 
-    <div class="coords-box">
-        Boxes:
+    <div id="output-circle">
+        <span style="color: rgb(255, 255, 255);">Informations :</span>
         <p></p>
-        <button class="controls-button" style="width: 175px; float: right;" onclick="randomizeCoords()">Generate Boxes</button>
-        <p></p>
-        <textarea id="box-coordinates" placeholder="width, height (ex: 100, 50)"></textarea>
+        <span id="minHauteur" style="font-size: 14px;">Taille minimale de la bande:</span><span class="output-info" style="color: rgb(255, 255, 255);"></span>
+        <br>
+        <span id="espaceUse" style="font-size: 14px;">Espaces utilisés % (cercle):</span><span class="output-info" style="color: rgb(255, 255, 255);"></span>
+        <br>
+        <span id="espaceLost" style="font-size: 14px;">Espaces perdu % (trou):</span><span class="output-info" style="color: rgb(255, 255, 255);"></span>
     </div>
 
-    <div class="control-box" style="text-align: center;">
-        <button class="controls-button" onclick="Main()">Start</button>
+    <div class="coords-circle">
+        Cercle (rayon):
         <p></p>
-        <button class="controls-button" onclick="Reset()">Reset</button>
+        <button class="controls-button" style="width: 175px; float: left;" onclick="randomizeCoords()">Génération des cercles</button>
+        <p></p>
+        <textarea id="circle-coordinates" placeholder="rayon (ex: 50)"></textarea>
+    </div>
+
+    <div class="control-circle" style="text-align: center;">
+        <button class="controls-button" onclick="Main()">Commencer</button>
     </div>
 
 

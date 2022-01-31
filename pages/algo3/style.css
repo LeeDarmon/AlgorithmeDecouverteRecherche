@@ -27,7 +27,7 @@ textarea {
     resize: none;
 }
 
-.options, .coords-box, .control-box {
+.options, .coords-circle, .control-circle {
     background-color: rgba(64, 64, 64, 0);
     width: 250px;
     height: auto;
@@ -41,7 +41,7 @@ textarea {
     padding: 10px;
 }
 
-/* Switch */
+
 .switch {
     position: relative;
     width: 30px;
@@ -51,14 +51,12 @@ textarea {
     float: right;
 }
 
-/* Overwrite default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* Circle/Slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -108,13 +106,13 @@ input:checked+.slider:before {
 
 
 /* Text Boxes */
-.input-box {
+.input-circle {
     color: black;
     width: 65px;
     float: right;
 }
 
-#box-coordinates {
+#circle-coordinates {
     color: black;
     width: 98%;
     height: 250px;
@@ -145,7 +143,7 @@ canvas {
     border-style: solid;
 }
 
-#output-box {
+#output-circle {
     position: absolute;
     background-color: rgb(64, 64, 64);
     width: 290px;
@@ -154,25 +152,25 @@ canvas {
     border-width: 1px;
     border-style: solid;
 
-    margin-left: 642px;
+    margin-left: 850px;
 
     padding: 10px;
 }
 
-#output-boxes {
-    position: absolute;
-    background-color: #404040;
-    width: max-content;
-    height: auto;
-    border: rgb(100, 100, 100);
-    border-width: 1px;
-    border-style: solid;
+/*#output-circle {*/
+/*    position: absolute;*/
+/*    background-color: #404040;*/
+/*    width: max-content;*/
+/*    height: auto;*/
+/*    border: rgb(100, 100, 100);*/
+/*    border-width: 1px;*/
+/*    border-style: solid;*/
 
-    margin-top: 162px;
-    margin-left: 642px;
+/*    margin-top: 162px;*/
+/*    margin-left: 642px;*/
 
-    padding: 10px;
-}
+/*    padding: 10px;*/
+/*}*/
 
 
 .output-info {

@@ -17,13 +17,18 @@ let meilleurY = 0;
 let largeurUtilise = 0;
 
 let canvas = document.getElementById("output-canvas");
+
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 let canvasCTX = canvas.getContext('2d');
 let gridWidth = document.getElementById("width-value");
 let gridHeight = document.getElementById("height-value");
-let coordinateBox = document.getElementById('box-coordinates');
+let hauteurMinBande = document.getElementById("minHauteur");
+let espaceUtilise = document.getElementById("espaceUse");
+let espacePerdu = document.getElementById("espaceLost");
+let coordinateCircle = document.getElementById('circle-coordinates');
+let outputCircle = document.getElementById('output-circle')
 
 // Classes //
 class Cercle {
@@ -35,12 +40,14 @@ class Cercle {
     }
 }
 
+// Retourne une valeur random entre le min et max
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Génère les cercles et attribut un rayon pour chaque cercle
 function randomizeCoords() {
     let coords = ""
     let nbCercle = getRandomIntInclusive(10, 100)
@@ -48,41 +55,45 @@ function randomizeCoords() {
         coords = `${coords + Random(50)}`
         if (i !== nbCercle - 1) coords = `${coords}\n`
     }
-    coordinateBox.value = coords
+    coordinateCircle.value = coords
 }
 
+// Main du projet
 function Main() {
     if (!inProgress) {
-        clearCanvas() // Reset Canvas of Rectangles & Text
-        inProgress = true // Stop user from Stopping Current Sort or Starting a New Sort, etc ...
+        clearCanvas() // Reset le canvas
+        inProgress = true
 
-        // -------------------------------------------- //
+        // Largeur de la bande (fixe)
         tailleCanvas = getRandomIntInclusive(200, 500)
 
-        // Check Width //
+        // Vérification de la taille
         if (tailleCanvas === 0) {
             inProgress = false
         }
-        // Check Format + Format Box Coords //
-        let boxes = processCoords(coordinateBox.value)
 
-        // Set Global Arrays //
-        g_Cercles = boxes.coords
+        // Créer les cercles
+        let circle = processCoords(coordinateCircle.value)
+        g_Cercles = circle.coords
+
+        // création de la matrice
         matrice = creerMatrice(g_Cercles.length, tailleCanvas)
-        // ----------------- //
+
+        // Hauteur min de la bande
         let shortestHeight = 0
         for (let rid = 0; rid < g_Cercles.length; rid++) {
-
             const r = g_Cercles[rid].r
 
+            // on place le premier cercle
             if (rid === 0) {
                 g_Cercles[rid].x = r
                 g_Cercles[rid].y = r
                 matrice = remplirMatrice(g_Cercles[rid].y, g_Cercles[rid].x, g_Cercles[rid].r, rid)
-            } else {
+            } else { // Pour les cercles suivants on calcul le meilleur emplacement
                 g_Cercles = meilleurEmplacement(rid)
             }
 
+            // On regarde si le cercle est plus haut que la hauteur de la bande actuelle
             if (g_Cercles[rid].x + g_Cercles[rid].r > shortestHeight) {
                 shortestHeight = g_Cercles[rid].x + g_Cercles[rid].r
             }
@@ -93,38 +104,49 @@ function Main() {
             nbCerclePlace++;
         }
 
-        // (Show + Scale) Height On Canvas //
+        // Taille du canvas
         canvas.style.height = shortestHeight + "px"
         canvas.height = canvas.clientHeight
-
         gridHeight.style.marginTop = shortestHeight + 18 + "px"
 
         gridHeight.innerHTML = shortestHeight
         const newHeight = (2 - Math.round(gridHeight.getBoundingClientRect().width) / 2).toString()
         gridHeight.style.marginLeft = Math.floor(newHeight) + "px"
-        // ------------------------------ //
 
-        // (Show + Scale) Width On Canvas //
+        // Valeur sur la canavs
         canvas.style.width = tailleCanvas + "px"
         canvas.width = canvas.clientWidth
-
         gridWidth.innerHTML = tailleCanvas
         const newWidth = (tailleCanvas - Math.round(gridWidth.getBoundingClientRect().width) / 2).toString()
         gridWidth.style.marginLeft = Math.floor(newWidth) + "px"
 
-        // ------------------------------ //
-        // Draw + Show Rectangles //
+        // On dessine les cercles //
         g_Cercles.forEach(cercle => {
             let nCercle = new Cercle(cercle.y, cercle.x, cercle.r, cercle.id)
             dessinerCercle(nCercle)
         })
 
+        hauteurMinBande.innerHTML = "Taille minimale de la bande: " + Math.round(shortestHeight)
+
+        let i;
+        let j;
+        let plein = 0;
+        let vide = 0;
+        for (i = 0; i < shortestHeight; i++) {
+            for (j = 0; j < matrice[i].length; j++) {
+                if (matrice[i][j] === "X") {
+                    vide++
+                } else {
+                    plein++
+                }
+            }
+        }
+
+        espaceUtilise.innerHTML = "Espaces utilisés % (cercle): " + Math.round((plein / (plein+vide)) * 100)
+        espacePerdu.innerHTML = "Espaces perdu % (trou): " + Math.round((vide/(plein+vide)) * 100)
+        outputCircle.style.marginLeft = canvasCTX.Width * 2 + 310 + "px"
         g_Cercles = []
     }
-}
-
-function Reset() {
-
 }
 
 function clamp(num, min, max) {
@@ -179,7 +201,6 @@ function clearCanvas() {
 }
 
 function getRandomColor() {
-    // color = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
     color = Math.floor(Math.random() * 16777215).toString(16);
     return color;
 }
