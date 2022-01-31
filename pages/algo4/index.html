@@ -1,30 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main</title>    
-    <link rel="stylesheet" href="../tailwind.css">
-</head>
-<body class="bg-gray-800 text-gray-200 w-full flex justify-center align-middle">
-    
-    <div class="grid grid-cols-1 gap-4 align-middle justify-items-center">
-        <h1 class="font-bold font-lg p-4">Découverte de la recherche</h1>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 1 : Ordonnancement
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 2 : Disque et rectangle
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 3 : Bande de tissue
-        </a>
-        <a class="bg-indigo-300 text-gray-900 rounded hover:bg-indigo-600 w-80 flex items-center justify-center">
-            Algorithme 4 : Conteneur et sphere
-        </a>
-    </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Main</title>
+        <link rel="stylesheet" href="../tailwind.css" />
+    </head>
+    <body class="bg-gray-800 text-gray-200 flex flex-col">
+        <script src="./renderer.js"></script>
 
-    <script src="./renderer.js"></script>
-</body>
+        <h1>Spheres dans un conteneur</h1>
+        <button class="bg-green-400 hover:bg-green-800" onclick="btnGenerate()">
+            Generer les spheres
+        </button>
+
+        <ul id="AllSphere"></ul>
+
+        <hr class="my-4" />
+
+        <button class="bg-green-400 hover:bg-green-800" onclick="mainLoop()">
+            Démarrer la simulation
+        </button>
+
+        <table>
+            <tr>
+                <th>En cours d'execution</th>
+                <th id="Exe">Non</th>
+            </tr>
+            <tr>
+                <th>Temps restant</th>
+                <th id="Time">x</th>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Collision encore ?</th>
+                <th id="Collisions"></th>
+            </tr>
+            <tr>
+                <th>Volume occupé en %</th>
+                <th id="Volume"></th>
+            </tr>
+            <tr>
+                <th>Spheres dans le conteneur</th>
+                <th>
+                    <ul id="Spheres"></ul>
+                </th>
+            </tr>
+        </table>
+    </body>
 </html>
