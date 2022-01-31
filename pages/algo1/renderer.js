@@ -241,7 +241,7 @@ function critere3() {
 }
 
 
-function algo_Jackson() {
+function algo_Johnson() {
     // machine 1 m1 et machine 2 m2
     var m1 = [];
     var m2 = [];
