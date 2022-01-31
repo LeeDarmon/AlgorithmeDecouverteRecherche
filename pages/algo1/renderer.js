@@ -33,6 +33,7 @@ var Fi = 0;
 var Di = 0;
 var R = 0;
 
+<<<<<<< Updated upstream
 var total_retard = 0;
 var somme_retard_initial = 0;
 
@@ -40,16 +41,44 @@ results = [];
 
 
 for (var t of taches) {
-    Pi = t.duree;
-    Fi += Pi;
-    Di = t.delai;
-    // R = Fi - Di;
+=======
+  var total_retard = 0;
+  var somme_retard_initial = 0;
+  var greater_retard_initial = 0;
 
+  results = [];
+  
+  
+  for (var t of taches) {
+
+>>>>>>> Stashed changes
+    Pi = t.duree;
+    Di = t.delai;
+
+<<<<<<< Updated upstream
     if (R < 0) {
         R += Fi - Di;
     } else {
         R = Fi - Di;
+=======
+    if(t.id == 1){
+      Fi = 0
     }
+    if(t.id == 2){
+      Fi = taches[0].delai
+    }
+    if(t.id == 3){
+      Fi = taches[1].delai
+    }
+    if(t.id == 4){
+      Fi = taches[2].delai
+    }
+    if(t.id == 5){
+      Fi = taches[3].delai
+>>>>>>> Stashed changes
+    }
+
+    R = Fi + Pi - Di
 
     results.push(R);
 }
@@ -59,12 +88,20 @@ console.log(results)
 
 for (var c of results) {
     somme_retard_initial += c
+<<<<<<< Updated upstream
 
 }
 
 for (var chiffre of results) {
     if (chiffre > total_retard) {
         greater_retard_initial = chiffre
+=======
+  }
+
+  for (var chiffre of results) {
+    if(chiffre > greater_retard_initial){
+      greater_retard_initial = chiffre
+>>>>>>> Stashed changes
     }
 }
 
@@ -84,6 +121,7 @@ function Critere1() {
     let tachesDuree = taches.sort((a, b) => {
         return a.duree - b.duree;
     });
+<<<<<<< Updated upstream
 
     let tachesSorted = tachesDuree.sort((a, b) => {
         return a.delai - b.delai;
@@ -93,12 +131,23 @@ function Critere1() {
 
     console.log(tachesSorted)
 
+=======
+  
+    // let tachesSorted = tachesDuree.sort((a, b) => {
+    //   return a.delai - b.delai;
+    // });
+  
+  
+    console.log(tachesDuree)
+  
+>>>>>>> Stashed changes
     var Pi = 0;
     var Fi = 0;
     var Di = 0;
     var R = 0;
 
     results = [];
+<<<<<<< Updated upstream
 
 
     for (var t of tachesSorted) {
@@ -171,6 +220,119 @@ function critere2() {
 
         results.push(R);
     }
+=======
+  
+    
+    for (var t of tachesDuree) {
+
+      Pi = t.duree;
+      Di = t.delai;
+  
+      if(t.id == 1){
+        Fi = 0
+      }
+      if(t.id == 2){
+        Fi = taches[0].delai
+      }
+      if(t.id == 3){
+        Fi = taches[1].delai
+      }
+      if(t.id == 4){
+        Fi = taches[2].delai
+      }
+      if(t.id == 5){
+        Fi = taches[3].delai
+      }
+  
+      R = Fi + Pi - Di
+  
+      results.push(R);
+    }
+  
+  
+    console.log(results);
+  
+    var g_r = 0
+  
+    for (var chiffre of results) {
+      if(chiffre > g_r){
+        g_r = chiffre
+      }
+    }
+  
+  
+    console.log(g_r);
+  
+    var divretard = document.getElementById("retard_final");
+    divretard.innerHTML = g_r;
+  }
+ 
+
+//critère 2 minimiser le retard moyen
+
+function critere2(){
+  let tachesDuree = taches.sort((a, b) => {
+    return a.duree - b.duree;
+  });
+  
+  let tachesSorted = tachesDuree.sort((a, b) => {
+    return a.delai - b.delai;
+  });
+  
+  console.log(tachesDuree);
+  
+  console.log(tachesSorted)
+  
+  var Pi = 0;
+  var Fi = 0;
+  var Di = 0;
+  var R = 0;
+  
+  results = [];
+  
+  
+  for (var t of taches) {
+
+    Pi = t.duree;
+    Di = t.delai;
+
+    if(t.id == 1){
+      Fi = 0
+    }
+    if(t.id == 2){
+      Fi = taches[0].delai
+    }
+    if(t.id == 3){
+      Fi = taches[1].delai
+    }
+    if(t.id == 4){
+      Fi = taches[2].delai
+    }
+    if(t.id == 5){
+      Fi = taches[3].delai
+    }
+
+    R = Fi + Pi - Di
+
+    results.push(R);
+  }
+  
+  
+  console.log(results);
+  
+  var total_retard = 0;
+  
+  for (var chiffre of results) {
+      total_retard += chiffre
+  }
+
+  console.log(total_retard)
+  
+  var moyenne_c2 = total_retard / results.length
+  
+  
+  console.log(moyenne_c2);
+>>>>>>> Stashed changes
 
 
     console.log(results);
@@ -200,6 +362,7 @@ function critere3() {
 
     console.log(tachesDuree)
 
+<<<<<<< Updated upstream
 
     var Pi = 0;
     var Fi = 0;
@@ -222,8 +385,54 @@ function critere3() {
         }
 
         results.push(R);
+=======
+  //critère 3 minimiser la somme des retards
+function critere3(){
+  let tachesDuree = taches.sort((a, b) => {
+    return a.duree - b.duree;
+  });
+  
+  let tachesSorted = tachesDuree.sort((a, b) => {
+    return a.delai - b.delai;
+  });
+  
+  console.log(tachesDuree);
+  
+  console.log(tachesSorted)
+  
+  var Pi = 0;
+  var Fi = 0;
+  var Di = 0;
+  var R = 0;
+  
+  results = [];
+  
+  
+  for (var t of taches) {
+
+    Pi = t.duree;
+    Di = t.delai;
+
+    if(t.id == 1){
+      Fi = 0
+    }
+    if(t.id == 2){
+      Fi = taches[0].delai
+    }
+    if(t.id == 3){
+      Fi = taches[1].delai
+    }
+    if(t.id == 4){
+      Fi = taches[2].delai
+>>>>>>> Stashed changes
+    }
+    if(t.id == 5){
+      Fi = taches[3].delai
     }
 
+    R = Fi + Pi - Di
+
+<<<<<<< Updated upstream
 
     console.log(results);
 
@@ -255,6 +464,21 @@ function algo_Johnson() {
         });
         divMachine1[i].tache.innerHTML = m1[i].duree;
     }
+=======
+    results.push(R);
+  }
+  
+  
+  console.log(results);
+  
+  var total_retard = 0;
+  
+  for (var chiffre of results) {
+      total_retard += chiffre
+  }
+
+  console.log(total_retard)
+>>>>>>> Stashed changes
 
     for (var i = 0; i < 5; i++) {
         m2.push(new tache(i + 1, getRandomIntInclusive(1, 200)));
