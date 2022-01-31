@@ -2,7 +2,7 @@
 
 Author    : Antoine Delétoille
 
-Date      : 24/12/2021
+Date      : 31/01/2022
 
 ------------------------------------------------------------------------------------ */
 
@@ -10,20 +10,11 @@ Date      : 24/12/2021
 let inProgress = false
 
 let g_Cercles = []
-let maxX = 0;
-let maxY = 0;
-let minX = 0;
-let minY = 0;
 let matrice = []
 let nbCerclePlace = 0;
-let matriceEssai = [];
 let meilleurX = 0;
 let meilleurY = 0;
-let tailleMaxCanvas = 0;
 let largeurUtilise = 0;
-// _G Elements //
-let main = document.querySelector("main");
-let state = document.getElementById("status");
 
 let canvas = document.getElementById("output-canvas");
 canvas.width = canvas.clientWidth;
@@ -32,22 +23,15 @@ canvas.height = canvas.clientHeight;
 let canvasCTX = canvas.getContext('2d');
 let gridWidth = document.getElementById("width-value");
 let gridHeight = document.getElementById("height-value");
-
-let outputBox = document.getElementById("output-box");
-let outputRectanglesBox = document.getElementById("output-boxes");
-let outputCercle = document.getElementById("outputRectangles");
 let coordinateBox = document.getElementById('box-coordinates');
-
-const INFINITY = 10 ** 10
 
 // Classes //
 class Cercle {
-    constructor(x, y, r, id, origin) {
+    constructor(x, y, r, id) {
         this.x = x;
         this.y = y;
         this.r = r;
         this.id = id;
-        this.origin = origin;
     }
 }
 
@@ -59,7 +43,7 @@ function getRandomIntInclusive(min, max) {
 
 function randomizeCoords() {
     let coords = ""
-    let nbCercle = getRandomIntInclusive(10,100)
+    let nbCercle = getRandomIntInclusive(10, 100)
     for (let i = 0; i < nbCercle; i++) {
         coords = `${coords + Random(50)}`
         if (i !== nbCercle - 1) coords = `${coords}\n`
@@ -78,12 +62,6 @@ function Main() {
         // Check Width //
         if (tailleCanvas === 0) {
             inProgress = false
-
-            return setTimeout(() => {
-                if (!inProgress) {
-                    Reset()
-                }
-            }, 2000)
         }
         // Check Format + Format Box Coords //
         let boxes = processCoords(coordinateBox.value)
@@ -93,7 +71,6 @@ function Main() {
         matrice = creerMatrice(g_Cercles.length, tailleCanvas)
         // ----------------- //
         let shortestHeight = 0
-        let test = 0
         for (let rid = 0; rid < g_Cercles.length; rid++) {
 
             const r = g_Cercles[rid].r
@@ -102,18 +79,16 @@ function Main() {
                 g_Cercles[rid].x = r
                 g_Cercles[rid].y = r
                 matrice = remplirMatrice(g_Cercles[rid].y, g_Cercles[rid].x, g_Cercles[rid].r, rid)
-                // tailleMaxCanvas = g_Cercles[rid].r
             } else {
-                // if (tailleCanvas * 2 > maxY + (r * 2)) {
                 g_Cercles = meilleurEmplacement(rid)
-                if (g_Cercles[rid].y + g_Cercles[rid].r > shortestHeight) {
-                    shortestHeight = g_Cercles[rid].y + g_Cercles[rid].r
-                }
+            }
+
+            if (g_Cercles[rid].x + g_Cercles[rid].r > shortestHeight) {
+                shortestHeight = g_Cercles[rid].x + g_Cercles[rid].r
             }
 
             // ----------------------------------- //
 
-            g_Cercles[rid].origin = 0 // Debugging purposes to test cases that are most redundant, or faulty
             console.log(g_Cercles)
             nbCerclePlace++;
         }
@@ -140,8 +115,8 @@ function Main() {
         // ------------------------------ //
         // Draw + Show Rectangles //
         g_Cercles.forEach(cercle => {
-            let nCercle = new Cercle(cercle.y, cercle.x, cercle.r, cercle.id, cercle.origin)
-            drawCircle(nCercle)
+            let nCercle = new Cercle(cercle.y, cercle.x, cercle.r, cercle.id)
+            dessinerCercle(nCercle)
         })
 
         g_Cercles = []
@@ -164,7 +139,7 @@ function Random(max) {
 function processCoords(inputCoords) {
 
     let coords = []
-    let current = new Cercle(0, 0, 0, 0, 0)
+    let current = new Cercle(0, 0, 0, 0)
     let switcher = 'r'
 
     for (let i = 0; i < inputCoords.length; i++) {
@@ -177,7 +152,7 @@ function processCoords(inputCoords) {
 
             current.r = parseInt(current.r);
             coords[coords.length] = current
-            current = new Cercle(0, 0, 0, 0, 0)
+            current = new Cercle(0, 0, 0, 0)
 
         } else if (n !== " ") {
             if (!parseInt(n) && n !== "0") return {success: false, message: "c6"}
@@ -205,29 +180,27 @@ function clearCanvas() {
 
 function getRandomColor() {
     // color = "hsl(" + Math.random() * 360 + ", 100%, 70%)";
-    color = Math.floor(Math.random()*16777215).toString(16);
+    color = Math.floor(Math.random() * 16777215).toString(16);
     return color;
 }
 
-function drawCircle(shape) {
+function dessinerCercle(shape) {
     const x = shape.x
     const y = shape.y
     const r = shape.r
     const id = shape.id
 
-    _drawCircle(x, y, r, id, getRandomColor(), "rgb(50, 50, 50)") // Draw Rectangle
+    _dessinerCercle(x, y, r, id, getRandomColor(), "rgb(50, 50, 50)") // Draw Rectangle
 
 }
 
-function _drawCircle(x, y, r, id, fill, stroke) {
+function _dessinerCercle(x, y, r, id, fill, stroke) {
     if ((x != r) || (y != r)) {
         canvasCTX.moveTo(x, y)
     }
     canvasCTX.beginPath()
     canvasCTX.fillStyle = "#" + getRandomColor();
     canvasCTX.strokeStyle = stroke;
-    canvasCTX.font = '12px serif';
-    canvasCTX.fillText(id, x, y);
     canvasCTX.lineWidth = 1
     canvasCTX.arc(x, y, r, 0, Math.PI * 2, false);
     canvasCTX.stroke()
@@ -248,56 +221,23 @@ function creerMatrice(tailleCvsX, tailleCvsY) {
             matrice[i][j] = "X"
         }
     }
-    // console.log(matrice)
     return matrice;
 }
 
 function remplirMatrice(x, y, r, id) {
     let i;
     let j;
-    let valId = id;
     let cercleMatrice = algo_Bresenham(r, id)
-    let debutX;
-    let finX;
-    let debutY;
-    let finY;
-
-    debutX = x - r
-    debutY = y - r
-    finX = x + r
-    finY = y + r
-
-    debutX = Math.round(debutX)
-    debutY = Math.round(debutY)
-    finX = Math.round(finX)
-    finY = Math.round(finY)
+    let debutX = Math.round(x - r)
+    let finX = Math.round(x + r)
+    let debutY = Math.round(y - r)
+    let finY = Math.round(y + r)
 
     for (i = debutX; i < finX; i++) {
         for (j = debutY; j < finY; j++) {
             if (matrice[i][j] === "X" || matrice[i][j].includes("coin") === true) {
                 matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
-            } else {
-                if (cercleMatrice[i - debutX][j - debutY] !== "X") {
-                    console.log("ALERTE !")
-                }
             }
-            //           matrice[i][j] = cercleMatrice[i - debutX][j - debutY]
-        }
-    }
-
-    if (matrice[finX + 1][debutY] === "X") {
-        matrice[finX + 1][debutY] = "coiny" + valId;
-    } else {
-        while (matrice[finX + 1][debutY] !== "X") {
-            debutY++
-        }
-        matrice[finX + 1][debutY] = "coiny" + valId;
-    }
-    if (matrice[debutX][finY + 1] === "X") {
-        matrice[debutX][finY + 1] = "coinx" + valId;
-    } else {
-        while (matrice[debutX][finY + 1] !== "X" && debutX < matrice.length - 1) {
-            debutX++
         }
     }
 
@@ -305,100 +245,45 @@ function remplirMatrice(x, y, r, id) {
     console.log("Cercle " + id + " dans la matrice");
     console.log(matrice);
     return matrice;
-
-}
-
-function placerCercle(id, idVoisin, axe) {
-    let distance = Math.sqrt(Math.pow((g_Cercles[id].x - g_Cercles[idVoisin].x), 2) + Math.pow((g_Cercles[id].y - g_Cercles[idVoisin].y), 2))
-    let difference = distance - (g_Cercles[id].r + g_Cercles[idVoisin].r)
-    if (axe === "x") {
-        if (difference > 0) {
-            g_Cercles[id].x -= difference
-        } else {
-            g_Cercles[id].x += difference
-        }
-    } else {
-        if (difference > 0) {
-            g_Cercles[id].y -= difference
-        } else {
-            g_Cercles[id].y += difference
-        }
-    }
-
-
-    return g_Cercles
 }
 
 function meilleurEmplacement(rid) {
-    let i;
-    let j;
     let k;
-    let l;
     let valSolution;
-    let position;
-    let longueurChaine;
-    let numTrou;
     let meilleurSolution = 10 ** 10;
     let meilleurSolutionID;
     let meilleurTrouX;
     let meilleurTrouY;
     let echange;
-    let axe;
-    let meilleurCoin;
     let minLigne = 10 ** 10;
     let boolPremiereLigne = false
-    for (i = 0; i < matrice.length; i++) {
-        for (j = 0; j < matrice[0].length; j++) {
-            position = matrice[i][j].includes("coin")
-            if (position === true) {
-                longueurChaine = matrice[i][j].length - 4;
-                numTrou = matrice[i][j].substr(5, longueurChaine)
-                axe = matrice[i][j].substr(4, 1)
-                numTrou = parseInt(numTrou, 10)
-                for (k = rid; k < g_Cercles.length; k++) {
-                    if (minLigne >= i && axe === "y") {
-                        minLigne = i
-                        if (i !== 0) {
-                            console.log(i, j)
-                        }
-                        valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
-                    } else if (i === 0) {
-                        valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
-                    }
-                    // valSolution = remplirMatriceTest(i, j, g_Cercles[k].r, k, axe, numTrou)
-                    if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution && axe === "x")) {
-                        if (largeurUtilise < tailleCanvas - 20 && axe === 'x' && boolPremiereLigne === false) {
-                            meilleurSolution = valSolution
-                            meilleurSolutionID = k
-                            meilleurTrouX = meilleurX
-                            meilleurTrouY = meilleurY
-                            meilleurCoin = matrice[i][j]
-                        } else if (largeurUtilise >= tailleCanvas - 50) {
-                            // console.log(minLigne)
-                            // if (minLigne > meilleurX) {
-                            boolPremiereLigne   = true
-                            minLigne = meilleurX
-                            meilleurSolution = valSolution
-                            meilleurSolutionID = k
-                            meilleurTrouX = meilleurX
-                            meilleurTrouY = meilleurY
-                            meilleurCoin = matrice[i][j]
-                            // }
 
-                        }
-                    }
-                }
+    for (k = rid; k < g_Cercles.length; k++) {
+        valSolution = remplirMatriceTest(g_Cercles[k].r, k)
+        if ((valSolution < meilleurSolution && valSolution > -1) || (valSolution === meilleurSolution)) {
+            if (largeurUtilise < tailleCanvas - 20 && boolPremiereLigne === false) {
+                meilleurSolution = valSolution
+                meilleurSolutionID = k
+                meilleurTrouX = meilleurX
+                meilleurTrouY = meilleurY
+            } else if (largeurUtilise >= tailleCanvas - 50) {
+                boolPremiereLigne = true
+                minLigne = meilleurX
+                meilleurSolution = valSolution
+                meilleurSolutionID = k
+                meilleurTrouX = meilleurX
+                meilleurTrouY = meilleurY
             }
         }
     }
-    console.log(meilleurCoin)
+
     echange = g_Cercles[rid]
     g_Cercles[rid] = g_Cercles[meilleurSolutionID];
     g_Cercles[meilleurSolutionID] = echange;
     g_Cercles[rid].x += (meilleurTrouX + g_Cercles[rid].r)
     g_Cercles[rid].y += (meilleurTrouY + g_Cercles[rid].r)
     matrice = remplirMatrice(g_Cercles[rid].x, g_Cercles[rid].y, g_Cercles[rid].r, rid)
-    // g_Cercles = placerCercle(rid, numTrou, axe)
+
     return g_Cercles;
 }
 
@@ -474,68 +359,21 @@ function algo_Bresenham(rayon, id) {
     return tableau
 }
 
-function remplirMatriceTest(x, y, r, id, axe, numTrou) {
-    let debutX = x
-    debutX = Math.floor(debutX)
-    let debutY = y
-    debutY = Math.floor(debutY)
-    let finX = x + r * 2
-    finX = Math.floor(finX)
-    let finY = y + r * 2
-    finY = Math.floor(finY)
+function remplirMatriceTest(r, id) {
     let i;
     let j;
-    let valId = id;
-    let cercleMatrice;
-    let bordureMax;
-    cercleMatrice = algo_Bresenham(r, id)
-    // if (g_Cercles[id].r > g_Cercles[numTrou].r) {
-    //     if (axe === "x") {
-    //         debutY = 0
-    //         finY = r * 2
-    //     } else {
-    //         debutX = 0
-    //         finX = r * 2
-    //     }
-    // } else {
-
-    // // On regarde où se termine la bordure gauche du cercle
-    for (i = 0; i < cercleMatrice.length; i++) {
-        if (cercleMatrice[i][0] !== "X") {
-            bordureMax = i + 1;
-        }
-    }
-
-    if (axe === "x") {
-        while (matrice[debutX + bordureMax][debutY] === "X" && debutY !== 0) {
-            debutY--
-            finY--
-        }
-    } else {
-        while (matrice[debutX][debutY + bordureMax] === "X" && debutX !== 0) {
-            debutX--
-            finX--
-        }
-    }
-    // }
-
-
+    let cercleMatrice = algo_Bresenham(r, id)
     let erreur = true;
-    let OldDebutX = debutX;
+    let debutX = 0
+    let debutY = 0
+    let finX = r * 2
+    let finY = r * 2
     let OldDebutY = debutY;
-    let OldFinX = finX
     let OldFinY = finY
     let compteurTrou;
     let tailleCercle;
 
     while (erreur === true) {
-        // if (axe === "x") {
-        //     debutY++
-        //     finY++
-        // } else {
-        //     debutX++
-        //     finX++
-        // }
         if (finY > matrice[debutX].length) {
             debutY = 0
             finY = OldFinY - OldDebutY
